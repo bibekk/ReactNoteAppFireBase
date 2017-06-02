@@ -1,0 +1,22 @@
+ .note {
+     width: 250px;
+ }
+ #app {
+     padding: 10px;
+ }
+ div.panel-heading {
+     color: #000!important;
+ }
+ div.panel {
+     margin-left: 20px;
+     box-shadow: 2px 2px 2px 1px #ccc;
+ }
+ .dashboard {
+     float: right;
+     margin-right: 10px;
+     width: 30%;
+ }
+ button.addNote {
+     margin-bottom: 10px;
+     margin-left: 20px;
+ }
