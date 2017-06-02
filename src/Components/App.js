@@ -16,7 +16,7 @@ class App extends React.Component{
         this.restoreNote = this.restoreNote.bind(this);
     }
     
-    //better to use this function
+    //better to use this function than declaring the state in constructor
     componentWillMount(){
         this.state = {
             notes: [
@@ -78,6 +78,7 @@ class App extends React.Component{
     restoreNote(id){
         var statecopy = Object.assign({},this.state);
         statecopy.notes[id].active = true;
+        statecopy.notes[id].editmode = false;
         this.setState(statecopy);
     }
     
@@ -85,7 +86,7 @@ class App extends React.Component{
     render(){
     
         return(
-            <div className="panel"><div className="dashboard"><Dashboard restoreNoteCallBack={this.restoreNote}  deletednotes={this.state.notes} /></div>
+            <div className="panel"><div className="dashboard"><Dashboard restoreNoteCallBack={this.restoreNote}  notes={this.state.notes} /></div>
             
             <button onClick={this.newNote} className="btn btn-primary addNote"><span className="glyphicon glyphicon-plus"></span></button>
                  {
