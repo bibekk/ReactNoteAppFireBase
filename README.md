@@ -1,3 +1,5 @@
+This project is just the POC for me learning the basics. This project is like a Sticky Note app whre you can edit and update the note. You can also delete the Note and restore it from the Dashboard. 
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
