@@ -16,7 +16,7 @@ class Dashboard extends React.Component{
                     <div className="panel-body">
                     <div>
                        <div>Total Notes: {this.props.notes.length} </div>
-                       <div>Deleted Notes: { this.props.notes.filter(this.filterInactive).length}</div>
+                       <div>Temp deleted Notes: { this.props.notes.filter(this.filterInactive).length}</div>
                          
                     </div>
                     <ul className="list-group">
@@ -24,7 +24,8 @@ class Dashboard extends React.Component{
                           this.props.notes.map(function(item,i){
                                if(!item.active){                             
                                     return(
-                                            <li className="list-group-item" key={i}>{item.title} <button className="btn btn-success" onClick={()=> this.props.restoreNoteCallBack(i)}> <span className="glyphicon glyphicon-share-alt">Restore</span></button></li>
+                                            <li className="list-group-item" key={i}>{item.title} <button className="btn btn-success" onClick={()=> this.props.restoreNoteCallBack(i)}> <span className="glyphicon glyphicon-share-alt">  Restore</span></button>
+                                            &nbsp;<button className="btn btn-danger" onClick={()=> this.props.deletePermCallBack(i)}>Delete Forever</button></li>
                                           );
                                }else{
                                    return null;               

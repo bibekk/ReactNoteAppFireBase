@@ -11,10 +11,13 @@
      margin-left: 20px;
      box-shadow: 2px 2px 2px 1px #ccc;
  }
+ div.notePanel div.panel-body {
+     font-family: cursive;
+ }
  .dashboard {
      float: right;
      margin-right: 10px;
-     width: 30%;
+     width: 50%;
  }
  button.addNote {
      margin-bottom: 10px;

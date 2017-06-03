@@ -14,12 +14,14 @@ class Note extends React.Component {
        
        this.edit = this.edit.bind(this);
        this.cancelEdit = this.cancelEdit.bind(this);
-       //onchange not implemented
-       //this.handleTextChange = this.handleTextChange.bind(this);
        this.update = this.update.bind(this);
-      // this.remove = this.remove.bind(this);
-       
    }
+    
+    componentDidUpdate(){
+        //console.log(this);
+       // console.log(this.refs.commentTitle.value);
+    }
+    
        
     //handling the change in text value to update the state with new value
     handleTextChange(e){
@@ -29,7 +31,7 @@ class Note extends React.Component {
     //if edit button clicked edit state is set to true
     edit(){
       this.setState({ editmode: true});
-    }
+      }
     
     //canceling edit set editmode state to false
     cancelEdit(){
@@ -49,7 +51,7 @@ class Note extends React.Component {
     }
       
     render() {
-       if(this.state.editmode){ // || this.props.title == 'New Note' && this.props.body == 'Sample text')
+       if(this.state.editmode){ 
            return this.renderEdit()
        }
         
@@ -70,10 +72,10 @@ class Note extends React.Component {
                 <div className="panel-body">
                     <div className ="commentText">{this.state.body}</div>
                     <br/>
-                    <button type="button" className="btn btn-primary" onClick={this.edit}><span className ="glyphicon glyphicon-pencil">  Edit</span></button> 
+                    <button type="button" className="btn btn-primary" onClick={this.edit}><span className ="glyphicon glyphicon-pencil"></span></button> 
                     &nbsp;
                    {/*use arrow function to pass values to method */}
-                    <button type="button" className="btn btn-danger" onClick={this.props.deleteNoteCallBack}><span className ="glyphicon glyphicon-trash">  Delete</span></button> 
+                    <button type="button" className="btn btn-danger" onClick={this.props.deleteNoteCallBack}><span className ="glyphicon glyphicon-trash"></span></button> 
                 </div>
            </div>
         );
@@ -83,7 +85,7 @@ class Note extends React.Component {
     renderEdit(){
         return (
            <div className="note panel panel-primary bg-success">
-                <div className ="panel-heading"><input ref="commentTitle" type="text" defaultValue={this.state.title}/></div>
+                <div className ="panel-heading"><input autoFocus ref="commentTitle" type="text" defaultValue={this.state.title}/></div>
                 <div className="panel-body">
                     <textarea ref ="commentText" defaultValue={this.state.body}></textarea>
                     <br/>

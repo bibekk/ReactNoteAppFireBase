@@ -14,13 +14,15 @@ class App extends React.Component{
         this.newNote = this.newNote.bind(this);
         this.updateNote = this.updateNote.bind(this);
         this.restoreNote = this.restoreNote.bind(this);
+        this.deletePremanently = this.deletePremanently.bind(this);
     }
     
     //better to use this function than declaring the state in constructor
     componentWillMount(){
         this.state = {
             notes: [
-                 {   'title' :'Apple',
+                 {  
+                    'title' :'Apple',
                     'body'  : 'Macbook pro is nice computer. It is expensive computer though.',
                     'active': false,
                     'editmode': false
@@ -55,8 +57,9 @@ class App extends React.Component{
     }
     
     newNote(){
+        //array unshift adds item into the first index and push adds to the last
         var newNote = Object.assign({},this.state);
-        newNote.notes.push({'title':'New Note','body':'Sample text','active': true,'editmode':true});
+        newNote.notes.unshift({'title':'New Note','body':'Sample text','active': true,'editmode':true});
         this.setState(newNote);
         console.log(newNote);
     }
@@ -82,18 +85,27 @@ class App extends React.Component{
         this.setState(statecopy);
     }
     
+    deletePremanently(id){
+        //removing permanently by splicing
+        var arr = this.state;
+        arr.notes.splice(id,1);
+        this.setState(arr);
+    }
+    
     
     render(){
     
         return(
-            <div className="panel"><div className="dashboard"><Dashboard restoreNoteCallBack={this.restoreNote}  notes={this.state.notes} /></div>
+            <div className="panel"><div className="dashboard"><Dashboard restoreNoteCallBack={this.restoreNote}  notes={this.state.notes} deletePermCallBack={this.deletePremanently} /></div>    
             
-            <button onClick={this.newNote} className="btn btn-primary addNote"><span className="glyphicon glyphicon-plus"></span></button>
-                 {
-                    this.state.notes.map(function(item,i){
-                      return item.active?<Note editmode={item.editmode} title = {item.title} body={item.body} key={i} id={i} updateNoteCallBack={this.updateNote}  deleteNoteCallBack={()=> this.removeNote(i)} />:null;
-                    },this)
-                }
+            <div className='notePanel'>
+                <button onClick={this.newNote} className="btn btn-primary addNote"><span className="glyphicon glyphicon-plus"></span></button>
+                     {
+                        this.state.notes.map(function(item,i){
+                          return item.active?<Note editmode={item.editmode} title = {item.title} body={item.body} key={i} id={i} updateNoteCallBack={this.updateNote}  deleteNoteCallBack={()=> this.removeNote(i)} />:null;
+                        },this)
+                    }
+                </div>
             </div>
         );
     }
