@@ -1,6 +1,7 @@
 import React from 'react';
 import Note from './Note';
 import Dashboard from './Dashboard';
+import * as firebase from 'firebase';
 
 class App extends React.Component{
     constructor(props){
@@ -19,7 +20,13 @@ class App extends React.Component{
     
     //better to use this function than declaring the state in constructor
     componentWillMount(){
-        this.state = {
+      
+        var ref  =firebase.database().ref('notes');
+        ref.on("value",function(snapshot){
+            console.log(snapshot.val())
+            this.setState({notes: snapshot.val()});
+        },this);
+       /* this.state = {
             notes: [
                  {  
                     'title' :'Apple',
@@ -40,7 +47,8 @@ class App extends React.Component{
                     'editmode': false
                 }
             ]
-        }
+        }*/
+        
     }
     
     //get deleted notes, passing 'this' will enable to get this pointer inside the function
