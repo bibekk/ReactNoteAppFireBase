@@ -17,8 +17,9 @@ import registerServiceWorker from './registerServiceWorker';
     messagingSenderId: "236325749356"
   };
 
-firebase.initializeApp(config);
-
+firebase.initializeApp(config).database().ref();
 
 ReactDOM.render(<App  />, document.getElementById('root'));
+
+
 registerServiceWorker();
