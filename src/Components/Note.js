@@ -1,4 +1,5 @@
 import React from 'react';
+import * as firebase from 'firebase';
 
 
 class Note extends React.Component {
@@ -17,9 +18,9 @@ class Note extends React.Component {
        this.update = this.update.bind(this);
    }
     
-    componentDidUpdate(){
-        //console.log(this);
-       // console.log(this.refs.commentTitle.value);
+    //will need to do on child if parent makes updates.
+   componentWillReceiveProps(nextProps){
+        this.setState({title: nextProps.title, body: nextProps.body, editmode: nextProps.editmode});
     }
     
        
@@ -30,12 +31,19 @@ class Note extends React.Component {
     
     //if edit button clicked edit state is set to true
     edit(){
-      this.setState({ editmode: true});
+      //this.setState({ editmode: true});
+       var ref = firebase.database().ref('notes').child(this.props.id);
+         ref.update({
+            'editmode':true
+         })
       }
     
     //canceling edit set editmode state to false
     cancelEdit(){
-        this.setState({editmode: false});
+       var ref = firebase.database().ref('notes').child(this.props.id);
+         ref.update({
+            'editmode':false
+         })
     }
     
     //this sets editmode to false and updates the body with the latest state value

@@ -9,7 +9,6 @@ class App extends React.Component{
         super(props);
         this.state = {
             notes : []
-
         }
       
         this.removeNote =this.removeNote.bind(this);
@@ -17,45 +16,39 @@ class App extends React.Component{
         this.updateNote = this.updateNote.bind(this);
         this.restoreNote = this.restoreNote.bind(this);
         this.deletePermanently = this.deletePermanently.bind(this);
-
     }
 
    
     //better to use this function than declaring the state in constructor
-    componentWillMount(){
-       var ref  =firebase.database().ref('notes');
+    componentDidUpdate(prevProps,prevState){
+    //  console.log(prevState.notes,this.state.notes);
+     /* if(prevState.notes !== this.state.notes){
+          this.setState({notes: this.state.notes})
+      }*/
+     /* var ref  =firebase.database().ref('notes');
           ref.on("value", snapshot => {
             let arr = [];
-            /*snapshot.forEach((snap)=> {
-                console.log(snap.val());
-            })*/
-            arr = snapshot.val();
+            snapshot.forEach((snap)=> {
+                arr.push(snap.val());
+            })
+          //  arr = snapshot.val();
             this.setState({notes: arr});
          },this)
-
-       /* this.state = {
-            notes: [
-                 {  
-                    'title' :'Apple',
-                    'body'  : 'Macbook pro is nice computer. It is expensive computer though.',
-                    'active': false,
-                    'editmode': false
-                },
-                {
-                    'title' : 'Dell',
-                    'body'  : 'Dell is also nice PC. It has got latest components.',
-                    'active': true,
-                    'editmode': false
-                },
-                {
-                    'title' :'HP',
-                    'body'  : 'HP is moderate type of PC',
-                    'active': true,
-                    'editmode': false
-                }
-            ]
-        }*/
-        
+        console.log(this.state.notes);*/
+    }
+    
+   
+    
+    componentWillMount(){
+         var ref  =firebase.database().ref('notes');
+          ref.on("value", snapshot => {
+            let arr = [];
+            snapshot.forEach((snap)=> {
+                arr.push(snap.val());
+            })
+            // console.log(this.state.notes);
+            this.setState({notes: arr});
+         },this)
     }
     
     //get deleted notes, passing 'this' will enable to get this pointer inside the function
@@ -72,26 +65,27 @@ class App extends React.Component{
     }
     
     newNote(){
-        //array unshift adds item into the first index and push adds to the last
-        //var newNote = Object.assign({},this.state);
-       // newNote.notes.unshift({'title':'New Note','body':'Sample text','active': true,'editmode':true});
-  
-        
        var ref  =firebase.database().ref('notes');
-       ref.child(this.state.notes.length).set({
+       var newNote = ref.push({
         'title':'New Note','body':'Sample text','active': true,'editmode':true
        });    
 
-        
+       ref.child(newNote.key).update({
+           id: newNote.key
+       })
        // this.setState(newNote);
        // console.log(newNote);
     }
     
     removeNote(id){
         //cloning the state and updating it
-        var statecopy = Object.assign({},this.state);
-        statecopy.notes[id].active = false;
-        this.setState(statecopy);
+       // var statecopy = Object.assign({},this.state);
+       // statecopy.notes[id].active = false;
+     //   this.setState(statecopy);
+        var ref = firebase.database().ref('notes').child(id);
+        ref.update({
+            'active':false
+         })
        }
     
     updateNote(id,title,body){
@@ -103,22 +97,32 @@ class App extends React.Component{
         var ref  =firebase.database().ref('notes/'+id);
         ref.update({
         'title': title,'body':body,'editmode':false
-        });    
-
+        })
+        
+        //this.forceUpdate();
+       /* 
+        var statecopy = Object.assign({},this.state);
+        statecopy.notes[id].title = title;
+        statecopy.notes[id].body = body;
+        this.setState(statecopy);
+       // this.setState(notes:)*/
     }
     
     restoreNote(id){
-        var statecopy = Object.assign({},this.state);
+        /*var statecopy = Object.assign({},this.state);
         statecopy.notes[id].active = true;
         statecopy.notes[id].editmode = false;
-        this.setState(statecopy);
+        this.setState(statecopy);*/
+        
+         var ref = firebase.database().ref('notes').child(id);
+         ref.update({
+            'active':true
+         })
     }
     
     deletePermanently(id){
-        //removing permanently by splicing
-        var arr = this.state;
-        arr.notes.splice(id,1);
-        this.setState(arr);
+        var ref = firebase.database().ref('notes').child(id);
+        ref.remove();
     }
     
     
@@ -131,7 +135,7 @@ class App extends React.Component{
                 <button onClick={this.newNote} className="btn btn-primary addNote"><span className="glyphicon glyphicon-plus"></span></button>
                      {
                         this.state.notes.map(function(item,i){
-                          return item.active?<Note editmode={item.editmode} title = {item.title} body={item.body} key={i} id={i} updateNoteCallBack={this.updateNote}  deleteNoteCallBack={()=> this.removeNote(i)} />:null;
+                          return item.active?<Note editmode={item.editmode} title = {item.title} body={item.body} key={i} id={item.id} updateNoteCallBack={this.updateNote}  deleteNoteCallBack={()=> this.removeNote(item.id)} />:null;
                         },this)
                     }
                 </div>
