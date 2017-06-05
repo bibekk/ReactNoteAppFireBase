@@ -10,12 +10,13 @@ class Note extends React.Component {
            editmode: this.props.editmode,
            title: this.props.title,
            body : this.props.body,
-
+           collapseview : this.props.collapseView
        }
        
        this.edit = this.edit.bind(this);
        this.cancelEdit = this.cancelEdit.bind(this);
        this.update = this.update.bind(this);
+       this.togglePanelBody = this.togglePanelBody.bind(this);
    }
     
     //will need to do on child if parent makes updates.
@@ -23,6 +24,9 @@ class Note extends React.Component {
         this.setState({title: nextProps.title, body: nextProps.body, editmode: nextProps.editmode});
     }
     
+    togglePanelBody(){
+        this.setState({collapseview: !this.state.collapseview})
+    }
        
     //handling the change in text value to update the state with new value
     handleTextChange(e){
@@ -76,16 +80,19 @@ class Note extends React.Component {
     renderDefault(){
         return (
            <div className="note panel panel-primary bg-success">
-                <div className ="panel-heading">{this.state.title}</div>
-                <div className="panel-body">
-                    <div className ="commentText">{this.state.body}</div>
-                    <br/>
-                    <button type="button" className="btn btn-primary" onClick={this.edit}><span className ="glyphicon glyphicon-pencil"></span></button> 
-                    &nbsp;
-                   {/*use arrow function to pass values to method */}
-                    <button type="button" className="btn btn-danger" onClick={this.props.deleteNoteCallBack}><span className ="glyphicon glyphicon-trash"></span></button> 
-                </div>
-           </div>
+                <div className ="panel-heading">{this.state.title}<span className="pull-right"><span className={!this.state.collapseview?'glyphicon glyphicon-triangle-top pointer':'glyphicon glyphicon-triangle-bottom pointer'} onClick={this.togglePanelBody}></span></span></div>
+                {
+                    !this.state.collapseview?
+                    <div className="panel-body">
+                        <div className ="commentText">{this.state.body}</div>
+                        <br/>
+                        <button type="button" className="btn btn-primary" onClick={this.edit}><span className ="glyphicon glyphicon-pencil"></span></button> 
+                        &nbsp;
+                       {/*use arrow function to pass values to method */}
+                        <button type="button" className="btn btn-danger" onClick={this.props.deleteNoteCallBack}><span className ="glyphicon glyphicon-trash"></span></button> 
+                    </div> : null
+               }           
+            </div> 
         );
     }
     
@@ -95,7 +102,7 @@ class Note extends React.Component {
            <div className="note panel panel-primary bg-success">
                 <div className ="panel-heading"><input autoFocus ref="commentTitle" type="text" defaultValue={this.state.title}/></div>
                 <div className="panel-body">
-                    <textarea ref ="commentText" defaultValue={this.state.body}></textarea>
+                    <textarea ref ="commentText" cols="25" rows="5" defaultValue={this.state.body}></textarea>
                     <br/>
                     <button type="button" className="btn btn-warning" onClick={this.cancelEdit}><span className = "glyphicon glyphicon-remove">Cancel</span></button>       
                     &nbsp;
@@ -105,6 +112,10 @@ class Note extends React.Component {
         );
     }
     
+}
+
+Note.defaultProps ={
+    collapseView: false
 }
 
 export default Note;
