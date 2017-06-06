@@ -24,8 +24,11 @@ class Dashboard extends React.Component{
                           this.props.notes.map(function(item,i){
                                if(!item.active){                             
                                     return(
-                                            <li className="list-group-item" key={i}>{item.title} <button className="btn btn-success btn-xs" onClick={()=> this.props.restoreNoteCallBack(item.id)}> <span className="glyphicon glyphicon-share-alt"></span></button>
-                                            &nbsp;<button className="btn btn-danger btn-xs" onClick={()=> this.props.deletePermCallBack(item.id)}>Delete Forever</button></li>
+                                            <li className="list-group-item" key={i}>{item.title} 
+                                                <button className="btn btn-danger btn-xs" onClick={()=> this.props.deletePermCallBack(item.id)}>Delete Forever</button>
+                                                    &nbsp;
+                                                <button className="btn btn-success btn-xs" onClick={()=> this.props.restoreNoteCallBack(item.id)}> <span className="glyphicon glyphicon-share-alt"></span></button>
+                                              </li>
                                           );
                                }else{
                                    return null;               
